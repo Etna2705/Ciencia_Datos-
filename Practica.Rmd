@@ -1,0 +1,78 @@
+---
+title: "Reporte RMarkdown"
+author: "Etna Carolina Cortés Martínez"
+date: "29/9/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Tema 
+
+## Subtema 
+
+### Tercer nivel de título
+
+#### cuarto nivel del título 
+
+
+texto en cursivas *cursivas*
+
+
+texto en negritas **negritas**
+
+
+subindice 3~2~ Ejemplo: H~2~O  Glucosa C~6~H~12~O~6~
+
+
+Sperindice 3^2^
+
+
+Texto tachado ~~texto~~
+
+av. Xalapa #23
+
+
+
+# Tipado matemático 
+
+Ecuación en linea $a=b+c$ 
+
+Ecuación en bloque $$a=b+c$$
+
+Insertar hípervinculo [Título] (dirección web),
+Ejemplo mi [github] (https://github.com/Etna2705/Ciencia_Datos-)
+
+
+# Bloque de comandos 
+El bloque de comando se llama **chunk** se inserta presionando el botón con el cuadro verde que contiene la letra **C**, localizada en la esquina superior de esta ventana.
+
+Ejemplo: voy a llamar una matriz de datos que se llama **iris**, que se encuentra precargada en R.
+```{r}
+data("iris")
+```
+
+## Exploración de matrices 
+```{r}
+colnames(iris)
+```
+
+## uso del bloque de comando.
+
+Mostrar el resultado del codigo 
+```{r echo=FALSE}
+colnames(iris)
+```
+
+Mostrar código sin resultados.
+```{r results=FALSE}
+colnames(iris)
+```
+
+Cargar y abrir paquetes 
+```{r warning=FALSE, message=FALSE}
+library("ggplot2")
+```
+
