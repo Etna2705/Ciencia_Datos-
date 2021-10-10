@@ -15,19 +15,19 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### Tercer nivel de título
 
-#### cuarto nivel del título 
+#### Cuarto nivel del título 
 
 
-texto en cursivas *cursivas*
+Texto en cursivas *cursivas*
 
 
-texto en negritas **negritas**
+Texto en negritas **negritas**
 
 
-subindice 3~2~ Ejemplo: H~2~O  Glucosa C~6~H~12~O~6~
+Subindice 3~2~ Ejemplo: H~2~O  Glucosa C~6~H~12~O~6~
 
 
-Sperindice 3^2^
+Superíndice 3^2^
 
 
 Texto tachado ~~texto~~
@@ -42,8 +42,8 @@ Ecuación en linea $a=b+c$
 
 Ecuación en bloque $$a=b+c$$
 
-Insertar hípervinculo [Título] (dirección web),
-Ejemplo mi [github] (https://github.com/Etna2705/Ciencia_Datos-)
+Insertar hípervinculo [título] (dirección web),
+ejemplo mi [github] (https://github.com/Etna2705/Ciencia_Datos-)
 
 
 # Bloque de comandos 
@@ -53,6 +53,11 @@ Ejemplo: voy a llamar una matriz de datos que se llama **iris**, que se encuentr
 ```{r}
 data("iris")
 ```
+
+
+
+
+
 
 ## Exploración de matrices 
 ```{r}
