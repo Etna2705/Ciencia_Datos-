@@ -1,0 +1,91 @@
+---
+title: "Importación y tratamiento de datos"
+author: "Etna Carolina Cortes Martinez"
+date: "11/10/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+ vamos a utilizar como ejemplo **iris**, que es una matriz de datos precargada en R
+
+# Abrir matriz de datos 
+```{r,warning=FALSE, message=FALSE}
+library(datasets)
+```
+```{r, warning=FALSE, message=FALSE}
+data("iris")
+```
+
+
+# Exploración de los datos **iris**
+1.- Dimención de la matriz
+```{r}
+dim(iris)
+```
+2.- Nombre de las columnas.
+```{r}
+colnames(iris)
+```
+```{r}
+names(iris)
+```
+3.-Clase a la que pertenece la matriz de datos.
+```{r}
+class(iris)
+```
+4.-Estructura interna 
+```{r}
+str(iris)
+```
+5.- Observación de una variable específica 
+```{r}
+iris$Species
+```
+6.- Visualización de tabla.
+```{r}
+View(iris)
+```
+
+7.- Estadística descriptiva básica 
+```{r}
+summary(iris)
+```
+
+# Datos faltantes 
+
+
+1.- Búsqueda de datos faltantes 
+```{r}
+anyNA(iris)
+```
+**Nota**: Se le pregunta a R si hay datos faltantes **(NA)**, R me responde **FALSE** en caso de *no haber NA's* y **True** en caso de *haber NA's*.
+
+2.- Suma de datos faltantes 
+```{r}
+sum(is.na(iris))
+```
+3.- librería **mice**
+
+a) Instalar el paquete **mice**
+
+b) Función **md. pattern(iris)**, pero no me compila en el pdf, así que voy a instalar el gráfico de NA's como imagen.
+**NOTA**: Se activó la función desde un script sencillo.
+
+![Gráfico de datos perdidos](C:\Users\52228\Desktop\R\ciencia_datos/Plot NA.jpeg){width=width height=height}
+
+# Datos atipicos.
+a)Detección. Se detectan con el grafico boxplot 
+```{r}
+bx1<-boxplot(iris)
+bx1
+```
+
+b) Filtrado de variables para realizar el bloxpot
+```{r}
+bx2<-boxplot(iris[,c(1:4)], col = "cyan1")
+bx2
+```
+
