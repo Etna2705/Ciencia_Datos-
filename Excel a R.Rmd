@@ -1,0 +1,23 @@
+---
+title: "Importación de base de datos a R"
+author: "Etna Carolina Cortés Martínez"
+date: "9/10/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+# Ejemplo de importación de tabla de Excel a RMarkdown 
+
+Para realizar la importación de una base de datos desde Excel se debe dar click en **File**, se desplegará una lista de herramientas, en la cual se dara click en **Import Dataset**, el cual contiene los distintos tipos de archivos que podemos importar.
+
+
+**NOTA** en caso de que *RStudio* no tenga instalada la paqueteria requerida, te solicitara permiso para descargarla, deberas permitirlo.
+
+
+Se abrirá una ventana en blanco seleccionaremos **Browser** nos desplegará una segunda ventana, donde buscaremos y seleccionaremos nuestro archivo *Excel*, nuestra base se mostrará de manera automática
+
