@@ -1,0 +1,184 @@
+---
+title: "Gráficos Básicos"
+author: "Etna Carolina Cortés Martínez"
+date: "23/10/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Librerías
+Para la realización de gráficos se va a utilizar la librería *ggplot2*, la cual debe estar cargada previamente.
+```{r, warning=FALSE, message=FALSE}
+library(ggplot2)
+```
+
+
+# Exploración de datos 
+Se exportará la matriz de datos *BD_penguins* que se obtuvo del análisis de K-vecinos, la cual no contiene valores faltantes.
+
+Lectura de la matriz de datos.
+```{r, results=FALSE}
+BD1<-read.csv("BD1.csv")
+```
+Se crea una nueva matriz de datos donde se seleccionan de la columna 2 a la 9.
+```{r}
+BD<-BD1[,2:9]
+```
+# Gráficos
+
+
+# Gráficos de barras
+
+
+1.- Se crea un vector de colores para cada barra. Los colores se pueden seleccionar del catálogo **Rcolor.pdf**
+```{r}
+color=c("cyan1","aquamarine1")
+```
+
+2.- Se construye la secuencia de comandos para generar el gráfico dentro del objeto **GB**, para este gráfico se selecciona el **fondo mínimo** indicado en la última línea de comando
+```{r}
+GB<-ggplot(BD, aes(x=sex))+
+geom_bar(colour= "black", fill=color)+
+ggtitle("Gráfico de barras")+
+xlab("Sexo")+
+ylab("Frecuencias")+
+theme_minimal()
+```
+
+3.- Se visualiza el objeto **GB.**
+```{r}
+GB
+```
+# Histograma 
+1.- Se construye la secuencia de comando para generar el gráfico dentro del objeto **HG**, para este gráfico se
+selecciona el *fondo clásico* indicado en la última línea de comando.
+```{r}
+HG<-ggplot(BD, aes(x=body_mass_g))+
+geom_histogram(col="black", fill="peachpuff")+
+ggtitle("Histograma")+
+xlab("Peso del pingüino (gr)")+
+ylab("Frecuencias")+
+theme_classic()
+```
+
+2.- Se visualiza el objeto **HG.**
+```{r}
+HG
+```
+# Diagrama de dispersión
+1.- Se construye la secuencia de comando para generar el gráfico dentro del objeto **DD,** para este gráfico se
+utiliza el *fondo oscuro* indicado en la última línea.
+```{r}
+DD<-ggplot(BD, aes(body_mass_g, flipper_length_mm))+
+geom_point(aes(shape=sex, color=sex))+
+ggtitle("Gráfico de dispersión")+
+xlab("Peso")+
+ylab("Largo de la aleta (mm)")+
+theme_dark()
+```
+2.- Se visualiza el objeto **DD.**
+```{r}
+DD
+```
+# Agregar subtítulo al gráfico
+Para poder agregar un subtítulo al gráfico se utiliza la función **labs** y se inserta en la tercera línea de comando como se indica en el ejemplo. Para este gráfico se dividen las poblaciones por sexo y se utiliza el *fondo ligero* para el fondo del gráfico indicado en la última línea de comando.
+```{r}
+DD1<-ggplot(BD, aes(body_mass_g, flipper_length_mm))+
+geom_point(aes(color=sex))+
+labs(title= "Gráfico de dispersión",
+subtitle= "Relación entre el largo de la aleta, el peso
+y el sexo")+
+xlab("Peso")+
+ylab("Largo de la aleta (mm)")+
+theme_light()
+```
+2.- se visualiza el objeto **DD1.**
+```{r}
+DD1
+```
+# Boxplot
+1.- Se crea un vector de colores previo. El número de elementos depende de las cajas (variables cualitativas) que se quieran visualizar en el *eje x*, para este caso la variable de visualización es **sexo**, la cual es un factor que contiene dos niveles: *femenino y masculino*. Al gráfico se le incluye una variable cuantitativa que es la
+que se mostrará en el *eje y.*
+```{r}
+color=c("violetred1","turquoise1")
+```
+2.- Se construye la secuencia de comando para generar el gráfico dentro del objeto **BX** y se implementa el
+**fondo bw**
+```{r}
+BX<-ggplot(BD, aes(x=sex, y=body_mass_g))+
+geom_boxplot(fill=color)+
+ggtitle("Boxplot")+
+xlab("Sexo")+
+ylab("Peso del pingüino (g)")+
+theme_bw()
+```
+```{r}
+BX
+```
+# Cambio de formato
+Para mejor visualización se puede orientar el gráfico de forma vertical.
+1.- En la sexta línea de comando se le agrega la función **coord_flip()**. Se implementa el **fondo bw.**
+```{r}
+BX1<-ggplot(BD, aes(x=sex, y=body_mass_g))+
+geom_boxplot(fill=color)+
+ggtitle("Boxplot")+
+xlab("Sexo")+
+ylab("Peso del pingüino (g)")+
+coord_flip()+
+theme_bw()
+```
+2.- Se visualiza el objeto **BX1.**
+```{r}
+BX1
+```
+# Gráfico Radial
+Es útil para visualizar variables cualitativas.
+1.- Se crea un vector de colores previo.
+```{r}
+colores=c("turquoise2","turquoise3","turquoise4")
+```
+2.- Se construye la secuencia de comando para generar el gráfico dentro del objeto **RG.** Para este gráfico se
+implementa el **fondo gris.**
+```{r}
+RG<-ggplot(BD, aes(x=species))+
+geom_bar(fill=colores, color="black")+
+ggtitle("Gráfico Radial")+
+xlab("Especies")+
+ylab("Frecuencias")+
+coord_polar()+
+theme_gray()
+```
+2.- Se visualiza el objeto **RG.**
+```{r}
+RG
+```
+# Organización de Gráficos
+Para mostrar varios gráficos en un mismo espacio se requiere instalar el paquete **gridExtra** y se abre su
+respectiva librería. La función que se implementa es **grid.arrange().**
+```{r}
+library(gridExtra)
+```
+**2 gráficos en una fila y dos columnas.**
+```{r}
+grid.arrange(GB, HG, nrow=1, ncol=2)
+```
+**3 gráficos en dos filas y dos columnas.**
+```{r}
+grid.arrange(GB, HG, DD, nrow=2, ncol=2)
+```
+**4 gráficos en dos filas y dos columnas.**
+```{r}
+grid.arrange(GB, HG, DD, BX, nrow=2, ncol=2)
+```
+**5 gráficos en tres filas y dos columnas.**
+```{r}
+grid.arrange(GB, HG, DD, BX, RG, nrow=3, ncol=2)
+```
+**5 gráficos en dos filas y tres columnas.**
+```{r}
+grid.arrange(GB, HG, RG, BX, DD, nrow=2, ncol=3)
+```
+
