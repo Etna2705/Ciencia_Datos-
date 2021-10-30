@@ -1,0 +1,197 @@
+---
+title: "Recodificación de variables"
+author: "Etna Carolina Cortés Martínez"
+date: "30/10/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Importación de la matriz
+
+1.- Lectura de la matriz
+```{r}
+BD<-read.csv("BD1.csv")
+```
+
+2.- Seleccionar las columnas 3 a la 10
+```{r}
+BD1<-BD[,3:10]
+```
+*El **"[]"**selecciona y los **":"**significan a la o hasta.*
+
+3.- Se obtiene una copia de la matriz
+```{r}
+BD2<-BD1
+```
+
+# Renombrar variables
+
+1.- Visualización del nombre de las variables. 
+```{r}
+colnames(BD1)
+```
+2.- Renombrar las variables en orden de las columnas.
+```{r}
+names(BD2)=c("Especies","Isla","Largo_pico_mm", "Ancho_pico_mm","Largo_aleta_mm",
+             "Masa_corporal_g", "Sexo","Año")
+```
+**c:***significa que se habre un vector*
+
+
+**NOTA:** *tenemos que renombrar de manera adecuada por que deben de tener los mismos nombre como viene el la base* 
+
+
+
+
+3.- Se vuelven a visualizar los nombres de las variables.
+```{r}
+colnames(BD2)
+```
+# Tratamiento de las variables cualitativas
+**Decir a R que nos identifique factores**
+
+
+1.-Factor______________________________
+
+
+a) Verificar  el orden de la variable
+```{r}
+str(BD2$Especies)
+```
+```{r}
+BD2$Especies
+```
+1) Variable Especie: originalmente está como caracter, pero se requiere 
+convertido a un factor de 3 niveles.
+
+
+```{r}
+BD2$Especies<-factor(BD2$Especies,
+                     levels =c("Adelie","Gentoo","Chinstrap"))
+```
+
+
+**NOTA**: Voy a decirle a r que en la variable especies me la reconosca como un
+**factor**(tengo que abrir parentesis y decir que dentro de la matriz que los 
+niveles van a ser el orden).
+
+*Se verifica que la variable sea un factor.*
+```{r}
+str(BD2$Especies)
+```
+2) variable Isla
+```{r}
+str(BD2$Isla)
+```
+```{r}
+BD2$Isla
+```
+```{r}
+BD2$Isla<-factor(BD2$Isla,
+                     levels =c("Torgersen","Dream","Biscoe"))
+```
+
+*visualización de facor con sus niveles*
+```{r}
+str(BD2$Isla)
+```
+3) Variable sexo
+```{r}
+BD2$Sexo
+```
+```{r}
+BD2$Sexo<-factor(BD2$Sexo,
+                 levels =c("male","female"),
+                 labels =c("Masculino","Femenino"))
+```
+**NOTA:** si cambio el orden de los datos me cambia el orden el factor.
+
+
+*visualización de facor con sus niveles*
+```{r}
+str(BD2$Sexo)
+```
+4) Variable cualitativa "año"
+```{r}
+BD2$Año
+```
+```{r}
+BD2$Año<-factor(BD2$Año,
+                 levels =c("2007","2008","2009"))
+```
+
+
+*visualización de factor con sus niveles*
+```{r}
+str(BD2$Año)
+```
+# Summary de toda la base de datos 
+```{r}
+summary(BD2)
+```
+# Guardar matriz de datos final
+```{r}
+BD3<-as.data.frame(BD2)
+```
+# Realización de gráfico "Bloxpot de variable sexo"
+```{r}
+library(ggplot2)
+```
+
+1.- Gráfico boxplot de exploración 
+```{r}
+color=c("deepskyblue1","magenta")
+```
+```{r}
+BX<-ggplot(BD3, aes(x=Sexo, y=Ancho_pico_mm))+
+    geom_boxplot(fill=color)+
+    ggtitle("Gráfico de cajas y bigotes")+
+    xlab("Sexo")+
+    ylab("Ancho del pico(mm)")
+```
+
+
+Visualización de gráfico.
+```{r}
+BX
+```
+
+
+# Realización de gráfico de dispersión 
+
+
+```{r}
+DD<-ggplot(BD3, aes(Masa_corporal_g, Ancho_pico_mm))+
+    geom_point(aes(color=Isla))+
+    labs(title= "Gráfico de dispersión")+
+    xlab("peso")+
+    ylab("Largo de la aleta (mm)")+
+    theme_light()
+```
+
+
+**NOTA:** ggplot reconoce que masa corporal es el eje "x" y el ancho del pico es el eje "y"
+
+
+Visualización de gráfico.
+```{r}
+DD
+```
+
+
+# Guardar la matriz de datos 
+
+
+```{r}
+write.csv(BD3, "BD3_penguins.csv")
+```
+
+
+
+
+
+
+
