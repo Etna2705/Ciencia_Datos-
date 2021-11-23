@@ -1,0 +1,334 @@
+---
+title: "NORMALIDAD"
+author: "Etna Carolina Cortés Martínez"
+date: "22/11/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+install.packages("stats")
+
+```{r}
+library(stats)
+```
+
+install.packages("nortest")
+
+```{r}
+library(nortest)
+```
+
+
+# IMPORTACIÓN DE LA MATRIZ
+
+1.- Lectura de la matriz
+```{r}
+BD3<-read.csv("BD3_penguins.csv")
+```
+2.- Determinar el numero de observaciones 
+```{r}
+length(BD3$Largo_pico_mm)
+```
+3.- Visualización de la distribución de la variable 
+```{r}
+hist(BD3$Largo_pico_mm)
+```
+
+# CREACIÓN DE LA MATRIZ <50
+
+Variable: Masa_corporal_g
+
+1.- visualizamos el nombre de las variables para identificar el número de la columna.
+
+```{r}
+colnames(BD3)
+```
+2.- Se seleccionan de las filas 4 ala 36 de la columna 7
+```{r}
+peso<-BD3[4:36,7]
+```
+
+3.- Se visualiza la variable 
+```{r}
+peso
+```
+
+#  KOLMOGOROV-SMIRNOV 
+
+**NOTA: Se aplica si tenemos mas de 50 observaciones**
+
+**H0: la variable tiene una distribucion normal**
+**Ha: La variable tiene una distribucion diferente a lo normal**
+
+*Interpretación:*
+**p-valor >0.05 No rechazo Ho**
+         **<0.05 rechazo Ho**
+
+
+1.-Exploración de la variable 
+```{r}
+hist(BD3$Largo_pico_mm) 
+```
+
+2.- Aplicación de la prueba de hipótesis 
+```{r}
+lillie.test(BD3$Largo_pico_mm)
+```
+# 3.- Interpretación
+**p.valor= 0.0002714, es menor a 0.05. por lo tanto, RECHAZO H0.**
+**Los datos siguen una distribución diferente a la normal.**
+
+#  SHAPIRO WILKS
+
+**NOTA: Se aplica sí tenemos MENOS de 50 observaciones**
+
+**Ho: La variable tiene distribución normal**
+**Ha: La variable tiene una distribución deferente a lo normal** 
+
+*Interpretación:*
+**p.valor >0.05 No rechazo Ho**
+        **<0.05 rechazo Ho**
+        
+1.- Exploración de la variable 
+```{r}
+hist(peso)
+```
+
+```{r}
+length(peso)
+```
+2.- Prueba de hipótesis
+```{r}
+shapiro.test(peso)
+```
+
+# 3.- Interpretación 
+**p-valor: 0.1157, es mayor que 0.05. Por lo tanto. NO se rechaza Ho,**
+**eso quiere decir que los datos siguen una distribución normal.**
+       
+# Importación de la Matriz 
+
+1.- Seleccionamos las filas de la especie Gentoo
+```{r}
+BD3$Especies
+```
+```{r}
+gentoo<-BD3[153:277,]
+```
+
+#  PRUEBA DE NORMALIDAD
+2.- Realizamos la prueba de normalidad de Kolmogorov-Smirnov.
+
+```{r}
+lillie.test(gentoo$Largo_pico_mm)
+```
+
+3.- Interpretación:
+
+**Ho: La variable tiene distribución normal.**
+
+**Ha: La variable tiene una distribución diferente a la normal.**
+
+#  PEARSON
+##  PEARSON PARA 2 VARIABLES
+
+Se implementa para datos cuantitativos con distribución normal.
+
+*Se parte de la hipótesis:*
+
+**Ho: (p=0) Las variables NO guardan una relación lineal entre ellas.** 
+**Ha: (p=/0) Las variables guardan una relación lineal entre ellas.**
+
+**NOTA:** Revisar el valor de la correlación.
+
+# PEARSON PARA MUCHAS VARIABLES
+
+Se instalará la paquetería corrplot y se activará
+
+install.packages("corrplot")
+
+```{r}
+library( corrplot )
+```
+1.- Preparación de la matriz.
+
+Se seleccionan sólo las variables numéricas.
+```{r}
+gentoo2 <- gentoo [, 4 : 7 ] 
+```
+
+2.- Cálculo de la matriz de correlaciones.
+```{r}
+cor_group <- round (cor ( gentoo2 ), 2 )
+```
+# 3.- Visualización de los resultados.
+```{r}
+head(cor_group)
+```
+4.- Generación del gráfico de forma completa.
+
+
+
+```{r}
+corrplot(cor_group, method = c("number"), type="full")
+```
+
+
+
+#4.1.- Generación del gráfico del cuadrante inferior
+
+
+
+
+```{r}
+corrplot(cor_group, method = c("number"), type="lower")
+```
+
+
+#4.2.- Generación del gráfico del cuadrante superior
+
+
+```{r}
+corrplot(cor_group, method = c("number"), type="upper")
+```
+
+
+5.- Cálculo del p-valor con nivel del confianza de 0.95, y alfa=0.05
+```{r}
+cor.mtest(gentoo2, conf.level=0.95)
+```
+
+
+
+
+6.- Generación del gráfico con diagrama de dispersión, coeficiente de 
+correlación, nivel de significancia e histograma.
+
+install.packages("PerformanceAnalytics")
+
+```{r}
+library(PerformanceAnalytics)
+```
+```{r}
+chart.Correlation(gentoo2, histogram = T, method= "pearson", pch=18)
+```
+```{r}
+chart.Correlation(gentoo2, histogram = F, method= "pearson", pch=18)
+```
+
+# RHO SPEARMAN
+
+
+Se implementa cuando los datos tiene una distribución *DIFERENTE* a la Normal.
+
+
+*Se parte de la hipótesis:*
+
+**Ho: (p=0) Las variables NO guardan una relación lineal entre ellas.**
+**Ha: (p=/0) Las variables guardan una relación lineal entre ellas.**
+
+
+# Matriz de datos.
+
+1.- Creación de la matriz.
+
+
+1.1.- Generación de calificaciones ficticias para las asignaturas de matemáticas,
+español, historia y geografía.
+
+
+```{r}
+set.seed(5)
+```
+```{r}
+mate<-sample(5:10, size= 45, replace=TRUE)
+```
+```{r}
+espa<-sample(5:10, size= 45, replace = TRUE)
+```
+```{r}
+hist<-sample(5:10, size= 45, replace= TRUE)
+```
+```{r}
+geogr<-sample(5:10, size= 45, replace= TRUE)
+```
+
+
+1.2.- Unir la matriz con las diferentes asignaturas
+```{r}
+calif_2<-data.frame(mate, espa, hist, geogr)
+```
+
+1.3.- Explorar la matriz calif_2
+```{r}
+View(calif_2)
+```
+```{r}
+str(calif_2)
+```
+
+1.4.- Sacar una copia de la matriz generada.
+```{r}
+calif_3<-calif_2
+```
+
+1.5.- Codificar la matriz de integer a numeric
+```{r}
+calif_3$mate<-as.numeric(calif_3$mate)
+```
+```{r}
+calif_3$espa<-as.numeric(calif_3$espa)
+```
+```{r}
+calif_3$hist<-as.numeric(calif_3$hist)
+```
+```{r}
+calif_3$geogr<-as.numeric(calif_3$geogr)
+```
+
+1.6.- Verificación de los cambios 
+```{r}
+View(calif_3)
+```
+```{r}
+str(calif_3)
+```
+
+# PRUEBA DE NORMALIDAD 
+
+```{r}
+shapiro.test(calif_3$mate)
+```
+```{r}
+shapiro.test(calif_3$espa)
+```
+
+# RHO DE SPEARMAN PARA 2 VARIABLES 
+
+1.- Realizar el cálculo de Rho.
+
+```{r}
+spearman<-cor.test(calif_3$mate,calif_3$espa, method = "spearman")
+```
+
+2.- Visualizar el resultado
+```{r}
+spearman
+```
+
+3.- Interpretación de los resultados (Anota la interpretación)
+Se obtuvo una Rho de **0.1884**, lo que significa que las variables no guardan
+correlación lineal.
+
+#   Rho de SPEARMAN PARA MUCHAS VARIABLES 
+2.- Generación del gráfico de dispersión, histograma, correlaciones  y
+significancia. 
+```{r}
+chart.Correlation(calif_3, histogram = T, method= "spearman", pch=18)
+```
+
+
+
