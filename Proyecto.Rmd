@@ -1,0 +1,210 @@
+---
+title: "Gráfico de nube"
+author: "Etna Carolina Cortés Martínez"
+date: "23/11/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Gráfico de nube del cuento "Los tres cerditos"
+
+# Introducción 
+
+Una nube de palabras **(también conocida como nube de etiquetas o de texto) **,
+es una representación visual sobre la regularidad en la que se repiten las 
+palabras, es utilizada principalmente para resaltar la manera en la que se
+repiten ciertos términos, cuantas más veces una palabra clave está presente en 
+un conjunto de datos, esa palabra aparecerá más grande y más remarcada.
+
+ 
+ 
+#  RESUMEN:
+
+
+El presente proyecto contiene el tratamiento de un texto literario dirigido a niños pequeños llamado **"Los tres cerditos"**.
+
+
+#  DATOS:
+
+*La siguiente información se obtuvo de:*
+
+**Artmann, P. (2020). Cuento de los tres cerditos. juegos educativos para niños.** 
+**Recuperado 23 de noviembre de 2021, de https://arbolabc.com/cuentos-clasicos-**
+**infantiles/los-tres-cochinitos**
+
+
+# 1.- Se instalo con anteriridad los presentes paquetes.
+
+install.packages("tm")
+
+install.packages("NLP")
+
+install.packages("SnowballC")
+
+install.packages("wordcloud")
+
+install.packages("RColorBrewer")
+
+---
+
+# 2.- cargamos las librerias correspondientes
+
+```{r, warning=FALSE, message=FALSE}
+library(tm)
+```
+```{r, warning=FALSE, message=FALSE}
+library(NLP)
+```
+```{r, warning=FALSE, message=FALSE}
+library(SnowballC)
+```
+```{r, warning=FALSE, message=FALSE}
+library(RColorBrewer)
+```
+```{r, warning=FALSE, message=FALSE}
+library(wordcloud)
+```
+
+
+#  CUENTO **" Los tres cerditos"**
+
+
+**NOTA: nuestro texto lo guardamos en bloc de notas en formato txt.**
+
+```{r, warning=FALSE, message=FALSE}
+texto <- readLines("Cuento.txt")
+```
+
+```{r}
+texto = iconv(texto, to="ASCII//TRANSLIT")
+```
+
+```{r}
+texto = Corpus(VectorSource(texto))
+```
+
+#  LIMPIAMOS NUESTRO TEXTO CON EL COMANDO tm_map 
+
+1.- Convertir todos los datos en minuscula (A=a)
+
+```{r, warning=FALSE, message=FALSE}
+discurso=tm_map(texto,tolower)
+```
+
+2.- Quitamos los espacios en blanco
+
+```{r, warning=FALSE, message=FALSE}
+discurso =tm_map(discurso, stripWhitespace)
+```
+
+3.- Quitamos la puntuacion
+
+```{r, warning=FALSE, message=FALSE}
+discurso = tm_map(discurso, removePunctuation)
+```
+
+4.- Quitamos los numeros.
+
+```{r, warning=FALSE, message=FALSE}
+discurso = tm_map(discurso, removeNumbers)
+```
+
+5.- Mostramos palabras vacias y genericas.
+
+```{r, warning=FALSE, message=FALSE}
+stopwords("spanish")
+```
+
+6.-Quitamos palabras genericas.
+
+```{r, warning=FALSE, message=FALSE}
+discurso=tm_map(discurso, removeWords,stopwords("spanish"))
+```
+
+#  DATA FRAME DE PALABRAS CON SU FRECUENCIA 
+
+1.- Creamos matriz de letras.
+
+```{r}
+letras= TermDocumentMatrix(discurso)
+```
+
+```{r}
+findFreqTerms(letras, lowfreq=5)
+```
+```{r}
+matrix=as.matrix(letras)
+```
+
+2.- Lo ordenamos y sumamos las letras de nuestra matriz.
+```{r}
+vector <- sort(rowSums(matrix),decreasing=TRUE) 
+```
+
+3.- Creamos la data con las palabras y su frecuencia.
+
+```{r}
+dataletras <- data.frame(word= names(vector),frequencia=vector)
+```
+
+# METODOLOGÍA DE ANÁLISIS:
+
+Realizamos un análisis de texto para poder visualizar la frecuencia con la que
+se repite cierto número de términos, esto a través de la limpieza de texto y 
+creación de una matriz de letras, logrando graficar dichos datos de manera clara
+y precisa.
+
+
+# GRAFICAMOS FRECUENCIA DE LAS PALABRAS
+
+```{r}
+barplot(dataletras[1:10,]$freq, las = 2, names.arg = dataletras[1:10,]$word,
+        col ="blue", main ="PALABRAS MAS FRECUENTES", ylab = "Frecuencia de 
+        palabras")
+```
+
+#  RESULTADOS:
+
+A través del tratamiento de los datos pudimos notar que la palabra con mayor
+frecuencia es **Lobo** con **14** veces, al contrario de las palabras **Feroz**
+y **Entrar** que solo se repiten en 7 ocasiones, dando como resultado una nube 
+con la palabra **Lobo**, más grande que los otros términos.
+
+
+
+# GRAFICAMOS LA NUBE DE PALABRAS
+
+```{r, warning=FALSE, message=FALSE}
+wordcloud(words = dataletras$word, freq = dataletras$freq, min.freq = 2,
+          max.words=100)
+```
+
+
+
+1.- En el centro la palabra mas importante.
+```{r}
+wordcloud(words = dataletras$word, freq = dataletras$freq, min.freq = 2,
+          max.words=100, random.order=FALSE, rot.per=0.2, 
+          colors=brewer.pal(8, "Dark2"))
+
+```
+# REFERENCIAS:
+
+1.- *Graficar NUBE de PALABRAS con R Studio. (2019, 30 diciembre). YouTube.* 
+    *Recuperado 23 de noviembre de 2021, de (https://www.youtube.com/watch?v=*
+    *tihnYJhZCHs)*
+
+2.- *Artmann, P. (2020). Cuento de los tres cerditos. juegos educativos para niños.* 
+    *Recuperado 23 de noviembre de 2021, de (https://arbolabc.com/cuentos-clasicos-*
+    *infantiles/los-tres-cochinitos)*
+
+
+
+
+
+
+
+
